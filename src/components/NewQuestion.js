@@ -26,12 +26,19 @@ class NewQuestion extends React.Component {
         }))
     }
 
+    handleChange = (name, e) => {
+        const option = e.target.value
+        this.setState({
+            [name]: option
+        })
+    }
+
     handleSubmit = (e) => {
         e.preventDefault()
 
         const { optionOne, optionTwo } = this.state
 
-        dispatch(handleCreateQuestion(optionOne, optionTwo))
+        this.props.dispatch(handleCreateQuestion(optionOne, optionTwo))
 
         this.setState(() => ({
             optionTwo: '',
@@ -63,7 +70,7 @@ class NewQuestion extends React.Component {
                 <button
                     className='btn'
                     type='submit'
-                    disabled={optionOne && optionTwo === ''}>
+                    disabled={!optionOne || !optionTwo}>
                     Submit
                 </button>
             </form>

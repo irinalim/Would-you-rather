@@ -1,16 +1,17 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {receiveQuestions} from "../actions/questions";
-import {setAuthedUser} from "../actions/authedUser";
 import LoadingBarContainer from "react-redux-loading";
 import QuestionCard from "./QuestionCard";
 import Nav from "./Nav";
+import {withRouter} from "react-router-dom";
 
 class Home extends Component {
     componentDidMount() {
+        if (!this.props.authedUser) {
+            return this.props.history.push('/')
+        }
         this.props.dispatch(receiveQuestions())
-        // if (this.props.authedUser === null || this.props.users === null || this.props.questions === null)
-        //     this.props.history.push('/')
     }
 
     state = {
@@ -22,7 +23,6 @@ class Home extends Component {
             showAnswered: true
         });
     }
-
     handleShowUnanswered = () => {
         this.setState({
             showAnswered: false
@@ -31,13 +31,20 @@ class Home extends Component {
 
     render() {
         const users = this.props.users
-        const answeredQuestions = Object.values(this.props.questionIds).filter((question) => {
-            Object.keys(users[this.props.authedUser].answers).includes(question.id)
+        const userId = this.props.authedUser
+        if (!userId) {
+            return <div>Loading...</div>
+        }
+        const answers = users[userId].answers
+        const answeredQuestions = this.props.questionIds.filter((questionId) => {
+            // return answers[questionId]
+            return answers.hasOwnProperty(questionId)
+            // return Object.keys(answers).includes(questionId)
         })
-        const unAnsweredQuestions = Object.values(this.props.questionIds).filter((question) =>
-            !Object.keys(users[this.props.authedUser].answers).includes(question.id)
-        )
-        console.log('show questions', answeredQuestions, unAnsweredQuestions)
+        const unAnsweredQuestions = this.props.questionIds.filter((questionId) => {
+           return !answers.hasOwnProperty(questionId)
+        })
+        console.log('show questions', {answeredQuestions, unAnsweredQuestions, all: this.props.questionIds, users})
 
 
         return (
@@ -100,4 +107,4 @@ function mapStateToProps({questions, users, authedUser}) {
     }
 }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps)(withRouter(Home))

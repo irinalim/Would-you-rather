@@ -16,6 +16,9 @@ class Login extends React.Component {
     render() {
         const users = this.props
         console.log("login props", this.props)
+        // form onSubmit
+        // 1. select-> onChange->setstate
+        // 2. select ref (google for react ref) get value from select as html element
         return(
             <div className='card column is-half is-offset-one-quarter'>
                 <div className='card-header'>
@@ -32,6 +35,7 @@ class Login extends React.Component {
                     <option value={user.id} key={user.id}>{user.name}</option>
                     ))}
                 </select>
+                <button type={"submit"}>Submit</button>
             </div>
         )
     }
