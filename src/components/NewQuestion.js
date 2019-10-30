@@ -1,13 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {handleCreateQuestion} from "../actions/shared";
+import Nav from "./Nav";
 
 class NewQuestion extends React.Component {
+    componentDidMount() {
+        if (!this.props.authedUser) {
+            return this.props.history.push('/')
+        }
+    }
+
     state = {
         optionOne: '',
         optionTwo: '',
-        toHome: false,
     }
 
     handleChangeOne = (e) => {
@@ -26,12 +32,13 @@ class NewQuestion extends React.Component {
         }))
     }
 
-    handleChange = (name, e) => {
-        const option = e.target.value
-        this.setState({
-            [name]: option
-        })
-    }
+    // One for two
+    // handleChange = (name, e) => {
+    //     const option = e.target.value
+    //     this.setState({
+    //         [name]: option
+    //     })
+    // }
 
     handleSubmit = (e) => {
         e.preventDefault()
@@ -39,20 +46,14 @@ class NewQuestion extends React.Component {
         const { optionOne, optionTwo } = this.state
 
         this.props.dispatch(handleCreateQuestion(optionOne, optionTwo))
+        this.props.history.push('/home')
 
-        this.setState(() => ({
-            optionTwo: '',
-            optionOne: '',
-            toHome: true,
-        }))
     }
     render() {
-        const {optionOne, optionTwo, toHome} = this.state
+        const {optionOne, optionTwo} = this.state
 
-        if (toHome === true) {
-            return <Redirect to='/'/>
-        }
         return (<div>
+            <Nav/>
             <h1>New Question</h1>
             <form className='' onSubmit={this.handleSubmit}>
                 <textarea
@@ -78,5 +79,11 @@ class NewQuestion extends React.Component {
     }
 }
 
+function mapStateToProps({authedUser}) {
+    return {
+        authedUser: authedUser,
+    }
+}
 
-export default connect()(NewQuestion)
+
+export default connect(mapStateToProps)(withRouter(NewQuestion))

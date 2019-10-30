@@ -1,11 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {setAuthedUser} from "../actions/authedUser";
+import {receiveQuestions} from "../actions/questions";
 
 class Login extends React.Component {
 
-    handleUserSelected =(id) => {
-        this.props.setAuthedUser(id)
+    handleUserSelected = (id) => {
+        this.props.dispatch(setAuthedUser(id))
+        this.props.dispatch(receiveQuestions())
         this.props.history.push('home')
     }
 
@@ -15,7 +17,7 @@ class Login extends React.Component {
 
     render() {
         const users = this.props
-        console.log("login props", this.props)
+        // console.log("login props", this.props)
         // form onSubmit
         // 1. select-> onChange->setstate
         // 2. select ref (google for react ref) get value from select as html element
@@ -29,10 +31,10 @@ class Login extends React.Component {
                     <h2>Sign In</h2>
 
                 </div>
-                <select name="users" onChange={(e) => this.handleUserSelected(e.target.value)}>
-                    <option value="" disabled={true} selected={true}>Choose a User</option>
+                <select name="users" defaultValue={""} onChange={(e) => this.handleUserSelected(e.target.value)}>
+                    <option value="" disabled={true}>Choose a User</option>
                     {this.props.users.map((user) => (
-                    <option value={user.id} key={user.id}>{user.name}</option>
+                        <option value={user.id} key={user.id}>{user.name}</option>
                     ))}
                 </select>
                 <button type={"submit"}>Submit</button>
@@ -45,4 +47,4 @@ function mapStateToProps({users}) {
     return {users: Object.keys(users).map(k => users[k])}
 }
 
-export default connect(mapStateToProps, {setAuthedUser})(Login)
+export default connect(mapStateToProps)(Login)

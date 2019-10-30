@@ -11,7 +11,11 @@ class Nav extends React.Component {
     }
 
     render() {
-        console.log("Nav props", this.props)
+        if (!this.props.authedUser) {
+            return null
+        }
+        // console.log("Nav props", this.props)
+        const user = this.props.users[this.props.authedUser]
         return (
             <nav className='tabs is-boxed'>
                 <ul>
@@ -31,10 +35,10 @@ class Nav extends React.Component {
                         </NavLink>
                     </li>
                 </ul>
-                <h3>Hello, {this.props.name}</h3>
+                <h3>Hello, {user.name}</h3>
                 <div className='media'>
                     <figure className='image is-48x48'>
-                        <img src={this.props.avatar} alt=""/>
+                        <img src={user.avatarURL} alt=""/>
                     </figure>
                 </div>
                 <div>
@@ -49,12 +53,10 @@ class Nav extends React.Component {
 }
 
 function mapStateToProps({authedUser, users}) {
-    console.log("mapsttopr", authedUser, "users", users)
+    // console.log("mapsttopr", authedUser, "users", users)
     return {
         authedUser: authedUser,
-        // users: users,
-        avatar: users[authedUser].avatarURL,
-        name: users[authedUser].name
+        users: users,
     }
 }
 

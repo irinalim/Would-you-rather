@@ -2,7 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {formatQuestion, formatDate} from '../utils/helpers'
 import {handleAnswerQuestion} from "../actions/shared";
-import authedUser from "../reducers/authedUser";
+import { withRouter } from "react-router-dom";
+
 
 class QuestionCard extends React.Component {
 
@@ -17,6 +18,9 @@ class QuestionCard extends React.Component {
         e.preventDefault()
         const {answer} = this.state
         this.props.dispatch(handleAnswerQuestion( this.props.id, this.props.authedUser, answer ))
+        if (answer) {
+            this.props.history.push(`/question/${this.props.id}`)
+        }
     }
 
     render() {
@@ -27,7 +31,7 @@ class QuestionCard extends React.Component {
 
         const {id, timestamp, author, avatar, optionOne, optionTwo} = question
 
-        console.log(this.props)
+        // console.log(this.props)
 
         return (
             <div className='card column is-half is-offset-one-quarter'>
@@ -78,4 +82,4 @@ function mapStateToProps({users, questions, authedUser}, {id}) {
     }
 }
 
-export default connect(mapStateToProps)(QuestionCard)
+export default connect(mapStateToProps)(withRouter(QuestionCard))

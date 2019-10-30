@@ -1,6 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import LeaderCard from "./LeaderCard";
+import Nav from "./Nav";
+import {withRouter} from "react-router-dom";
 
 class Leaderboard extends React.Component {
     componentDidMount() {
@@ -8,12 +10,17 @@ class Leaderboard extends React.Component {
     }
 
     render() {
+        if (!this.props.authedUser) {
+            this.props.history.push('/')
+            return null
+        }
         return (
             <div>
+                <Nav/>
                 <h1>Leaderboard</h1>
                 <div>
                     {this.props.usersSorted.map((user) => (
-                        <div>
+                        <div key={user.id}>
                             <LeaderCard user={user}/>
                         </div>
                     ))}
@@ -23,7 +30,7 @@ class Leaderboard extends React.Component {
     }
 }
 
-function mapStateToProps({users}) {
+function mapStateToProps({users, authedUser}) {
     const newUsers = Object.keys(users).map(k => users[k])
     newUsers.map((newUser) => {
         newUser.score = Object.keys(newUser.answers).length + newUser.questions.length
@@ -32,7 +39,8 @@ function mapStateToProps({users}) {
     return {
         users: users,
         usersSorted: usersSorted,
+        authedUser: authedUser,
     }
 }
 
-export default connect(mapStateToProps)(Leaderboard)
+export default connect(mapStateToProps)(withRouter(Leaderboard))

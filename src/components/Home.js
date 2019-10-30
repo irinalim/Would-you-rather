@@ -5,13 +5,14 @@ import LoadingBarContainer from "react-redux-loading";
 import QuestionCard from "./QuestionCard";
 import Nav from "./Nav";
 import {withRouter} from "react-router-dom";
+import ResultCard from "./ResultCard";
 
 class Home extends Component {
     componentDidMount() {
         if (!this.props.authedUser) {
             return this.props.history.push('/')
         }
-        this.props.dispatch(receiveQuestions())
+        // this.props.dispatch(receiveQuestions())
     }
 
     state = {
@@ -44,7 +45,7 @@ class Home extends Component {
         const unAnsweredQuestions = this.props.questionIds.filter((questionId) => {
            return !answers.hasOwnProperty(questionId)
         })
-        console.log('show questions', {answeredQuestions, unAnsweredQuestions, all: this.props.questionIds, users})
+        // console.log('show questions', {answeredQuestions, unAnsweredQuestions, all: this.props.questionIds, users})
 
 
         return (
@@ -76,7 +77,7 @@ class Home extends Component {
                                 ? answeredQuestions.map((id) => (
                                     <li key={id}>
                                         <p>Answered Questions</p>
-                                        <QuestionCard id={id}/>
+                                        <ResultCard id={id}/>
                                         <br/>
                                     </li>
                                 ))

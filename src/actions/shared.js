@@ -26,8 +26,10 @@ export function handleCreateQuestion(optionOne, optionTwo) {
     return (dispatch, getState) => {
         const { authedUser } = getState()
         dispatch(showLoading())
-        return saveQuestion({optionOne, optionTwo, authedUser})
+        return saveQuestion({optionOne, optionTwo, author: authedUser})
             .then((question) => dispatch(saveQuestionToQuestions(question)))
-            .then((question) => dispatch(saveQuestionToUser(question)))
+            .then((data) => {
+                dispatch(saveQuestionToUser(data.question))
+            }).then(() => dispatch(hideLoading()))
     }
 }

@@ -8,6 +8,7 @@ import LoadingBarContainer from "react-redux-loading";
 import Login from "./Login";
 import NewQuestion from "./NewQuestion"
 import Leaderboard from "./Leaderboard";
+import ResultPage from "./ResultPage";
 
 class App extends React.Component {
     componentDidMount() {
@@ -15,7 +16,7 @@ class App extends React.Component {
     }
 
     render() {
-        console.log("render", this.props);
+        // console.log("render", this.props);
         return (
             <Router>
                 <div className="App">
@@ -31,6 +32,7 @@ class App extends React.Component {
                                 <Route path='/new' component={NewQuestion}/>
                                 <Route path='/home' component={Dashboard}/>
                                 <Route path='/leaderboard' component={Leaderboard}/>
+                                <Route path='/question/:id' component={ResultPage}/>
                             </div>
                         }
                         {/*<Dashboard/>*/}
