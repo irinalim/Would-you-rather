@@ -1,4 +1,4 @@
-#Would you rather app
+## Would you rather app
 Would you rather is an app built with Reactjs & Redux where a user answers questions based on two options given. 
 
 The application consists of six pages.
